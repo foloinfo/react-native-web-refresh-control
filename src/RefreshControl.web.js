@@ -18,6 +18,7 @@ RefreshControl.propTypes = {
   titleColor: PropTypes.any,
   style: PropTypes.any,
   children: PropTypes.any,
+  pullDownThreshold: PropTypes.number,
 }
 export default function RefreshControl({
   refreshing,
@@ -31,6 +32,7 @@ export default function RefreshControl({
   titleColor,
   onRefresh,
   enabled,
+  pullDownThreshold = 45,
 }) {
   const onRefreshRef = useRef(onRefresh)
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function RefreshControl({
 
         const adjustedDy = gestureState.dy <= 0 ? 0 : (gestureState.dy * 150) / (gestureState.dy + 120) // Diminishing returns function
         pullDownSwipeMargin.current.setValue(adjustedDy)
-        const newValue = adjustedDy > 45 ? 1 : 0
+        const newValue = adjustedDy > pullDownThreshold ? 1 : 0
         if (newValue !== pullPosReachedState.current) {
           pullPosReachedState.current = newValue
           Animated.timing(pullPosReachedAnimated.current, {
